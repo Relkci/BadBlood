@@ -344,7 +344,7 @@
     #Set Random Job Title
     $aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
      try{
-         Set-ADUser -Identity $name -JobTitle "$aduserTitle" 
+         Set-ADUser -Identity $name -Title "$aduserTitle" 
      }
     catch{
     }
@@ -372,6 +372,8 @@
      }
     catch{
     }
+    #Set Street Address to badblood tag
+    Set-ADUser -Identity $name -Street "Created with secframe.com/badblood."
 
 
         
