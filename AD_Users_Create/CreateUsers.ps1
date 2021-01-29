@@ -74,7 +74,7 @@
         }
     
 
-        }
+        
 
     
     function New-SWRandomPassword {
@@ -268,6 +268,7 @@
             if ($passwordinDesc -lt 100) { 
                 $description = 'Just so I dont forget my password is ' + $pwd 
             }else{}
+
     new-aduser -server $setdc  -Description $Description -DisplayName $name -name $name -SamAccountName $name -Surname $name -Enabled $true -Path $ouLocation -AccountPassword (ConvertTo-SecureString ($pwd) -AsPlainText -force)
 
     #===============================
@@ -381,4 +382,4 @@
     #End Create User Objects
     ################################
     
-    
+    }
