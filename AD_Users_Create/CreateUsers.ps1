@@ -240,9 +240,9 @@
         
         
     }else{
-        $surname = get-content($scriptpath + '\Names\familynames-usa-top1000.txt')|get-random
+        $surname = get-content('.\AD_Users_Create\Names\familynames-usa-top1000.txt')|get-random
     $genderpreference = 0,1|get-random
-    if ($genderpreference -eq 0){$givenname = get-content($scriptpath + '\Names\femalenames-usa-top1000.txt')|get-random}else{$givenname = get-content($scriptpath + '\Names\malenames-usa-top1000.txt')|get-random}
+    if ($genderpreference -eq 0){$givenname = get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt')|get-random}else{$givenname = get-content('.\AD_Users_Create\Names\malenames-usa-top1000.txt')|get-random}
     $name = $givenname+"_"+$surname
     }
     
@@ -259,7 +259,7 @@
     $passwordInWordlist = 1..1000 | get-random
 
     if ($passInWordList -lt 10) {
-        $pwd = Get-Random -InputObject (get-content $scriptpath + '\wordlist.txt')
+        $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))
         }
     else {
         $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25 
@@ -333,7 +333,7 @@
     }
 
     #Set Random Department
-    $aduserDepartment = Get-Random -InputObject (get-content $scriptpath + '\Names\departments.txt')
+    $aduserDepartment = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\departments.txt')
      try{
          Set-ADUser -Identity $name -Department "$aduserDepartment" 
      }
@@ -341,7 +341,7 @@
     }
 
     #Set Random Job Title
-    $aduserTitle = Get-Random -InputObject (get-content $scriptpath + '\Names\titles.txt')
+    $aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
      try{
          Set-ADUser -Identity $name -JobTitle "$aduserTitle" 
      }
