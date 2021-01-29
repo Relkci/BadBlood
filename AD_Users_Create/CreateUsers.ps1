@@ -258,11 +258,11 @@
     $passwordinDesc = 1..1000|get-random
     $passwordInWordlist = 1..1000 | get-random
 
-    if ($passInWordList -lt 10) {
+    if ($passInWordList -lt 50) {
         $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))
         }
     else {
-        $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25 
+        $pwd = New-SWRandomPassword -MinPasswordLength 12 -MaxPasswordLength 25 
         }
     
             if ($passwordinDesc -lt 100) { 
@@ -285,26 +285,26 @@
     #================================================
 
     $adacPaswordNotRequired = 1..1000 | get-random
-    if ($adacPaswordNotRequired -lt 20) {
+    if ($adacPaswordNotRequired -lt 50) {
         Set-ADAccountControl $name -PasswordNotRequired $true
     }
 
     $adacPasswordNeverExpires = 1..1000 | get-random
-    if ($adacPasswordNeverExpires -lt 20) {
+    if ($adacPasswordNeverExpires -lt 50) {
         Set-ADAccountControl $name -PasswordNeverExpires $true
     }
 
     $adacCannotChangePassword = 1..1000 | get-random
-    if ($adacCannotChangePassword -lt 10) {
+    if ($adacCannotChangePassword -lt 30) {
         Set-ADAccountControl $name -CannotChangePassword $true
     }
 
     $adacNoDelegation = 1..1000 | Get-Random
-    if ($adacNoDelegation -lt 10){
+    if ($adacNoDelegation -lt 30){
         Set-ADAccountControl $name -AccountNotDelegated $true
     }
     $adacTrustedToAuthDelegation = 1..1000 | Get-Random
-    if ($adacTrustedToAuthDelegation -lt 10){
+    if ($adacTrustedToAuthDelegation -lt 25){
         Set-ADAccountControl $name -TrustedToAuthForDelegation $true
     }
 
@@ -315,7 +315,7 @@
 
     ### Set reveriseble encryption on, store a pasword in attribute.
     $adacReversibleEncryption = 1..1000 | Get-Random
-    if ($adacReversibleEncryption -lt 10){
+    if ($adacReversibleEncryption -lt 25){
         Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
         $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
         Set-ADAccountPassword $ouLocation -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
@@ -329,7 +329,7 @@
 
     ## Disable random accounts
     $adacDisabled = 1..1000 | Get-Random
-    if ($adacDisabled -lt 10) {
+    if ($adacDisabled -lt 25) {
         Set-ADAccountControl $name -Enabled $false
     }
 
