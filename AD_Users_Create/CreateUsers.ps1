@@ -73,7 +73,9 @@
             $scriptpath = $scriptdir
         }
     
-    
+
+        }
+
     
     function New-SWRandomPassword {
         <#
@@ -254,19 +256,20 @@
     # 
     
     $passwordinDesc = 1..1000|get-random
-        
-        $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
-            if ($passwordinDesc -lt 10) { 
+    $passwordInWordlist = 1..1000 | get-random
+
+    if ($passInWordList -lt 10) {
+        $pwd = Get-Random -InputObject (get-content .\AD_Users_Create\wordlist.txt)
+        }
+    else {
+        $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25 
+        }
+    }
+            if ($passwordinDesc -lt 100) { 
                 $description = 'Just so I dont forget my password is ' + $pwd 
             }else{}
     new-aduser -server $setdc  -Description $Description -DisplayName $name -name $name -SamAccountName $name -Surname $name -Enabled $true -Path $ouLocation -AccountPassword (ConvertTo-SecureString ($pwd) -AsPlainText -force)
-    
-    
-    
-        
-    
-    $pwd = ''
-    
+
     #===============================
     #SET ATTRIBUTES - no additional attributes set at this time besides UPN
     #Todo: Set SPN for kerberoasting.  Example attribute edit is in createcomputers.ps1
@@ -275,6 +278,104 @@
     $upn = $name + '@' + $dnsroot
     try{Set-ADUser -Identity $name -UserPrincipalName "$upn" }
     catch{}
+
+    #================================================
+    #SET SOME RANDOM AD AccountControl Randomness
+    #================================================
+
+    $adacPaswordNotRequired = 1..1000 | get-random
+    if ($adacPaswordNotRequired -lt 20) {
+        Set-ADAccountControl $name -PasswordNotRequired $true
+    }
+
+    $adacPasswordNeverExpires = 1..1000 | get-random
+    if ($adacPasswordNeverExpires -lt 20) {
+        Set-ADAccountControl $name -PasswordNeverExpires $true
+    }
+
+    $adacCannotChangePassword = 1..1000 | get-random
+    if ($adacCannotChangePassword -lt 10) {
+        Set-ADAccountControl $name -CannotChangePassword $true
+    }
+
+    $adacNoDelegation = 1..1000 | Get-Random
+    if ($adacNoDelegation -lt 10){
+        Set-ADAccountControl $name -AccountNotDelegated $true
+    }
+    $adacTrustedToAuthDelegation = 1..1000 | Get-Random
+    if ($adacTrustedToAuthDelegation -lt 10){
+        Set-ADAccountControl $name -TrustedToAuthForDelegation $true
+    }
+
+    $adacChangePassAtLogon = 1..1000 | Get-Random
+    if ($adacChangePassAtLogon -lt 10){
+        Set-ADUser -Identity $name -ChangePasswordAtLogon $true
+    }
+
+    ### Set reveriseble encryption on, store a pasword in attribute.
+    $adacReversibleEncryption = 1..1000 | Get-Random
+    if ($adacReversibleEncryption -lt 10){
+        Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
+        $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
+        Set-ADAccountPassword $ouLocatio-Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
+        $adacReversibleEncryptionUnset = 1..1000 | Get-Random
+        # This will disable the feature but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration.
+        if ($adacReversibleEncryptionUnset -lt 500){
+            Set-ADAccountControl $name -AllowReversiblePasswordEncryption $false
+            }
+        }
+    }
+
+    ## Disable random accounts
+    $adacDisabled = 1..1000 | Get-Random
+    if ($adacDisabled lt 10) {
+        Set-ADAccountControl $name -Enabled $false
+    }
+
+    #Set Random Department
+    $aduserDepartment = Get-Random -InputObject (get-content .\AD_Users_Create\names\departments.txt)
+     try{
+         Set-ADUser -Identity $name -Department "$aduserDepartment" 
+     }
+    catch{
+    }
+
+    #Set Random Job Title
+    $aduserTitle = Get-Random -InputObject (get-content .\AD_Users_Create\names\titles.txt)
+     try{
+         Set-ADUser -Identity $name -Department "$aduserTitle" 
+     }
+    catch{
+    }
+
+    #Set Random EmployeeID
+    $aduserEmpNum = 1..100000 | get-random
+     try{
+         Set-ADUser -Identity $name -EmployeeNumber $aduserEmpNum
+     }
+    catch{
+    }
+
+    #Set Random POBox
+    $aduserPOB = 1..100000 | get-random
+     try{
+         Set-ADUser -Identity $name -POBox $aduserPOB
+     }
+    catch{
+    }
+
+    #Set Random PostalCode
+    $aduserPostalCode = 1..100000 | get-random
+     try{
+         Set-ADUser -Identity $name -PostalCode $aduserPostalCode
+     }
+    catch{
+    }
+
+
+        
+    $pwd = ''
+    
     
     ################################
     #End Create User Objects
