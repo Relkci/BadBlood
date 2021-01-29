@@ -324,7 +324,7 @@
             Set-ADAccountControl $name -AllowReversiblePasswordEncryption $false
             }
         }
-    }
+    
 
     ## Disable random accounts
     $adacDisabled = 1..1000 | Get-Random
