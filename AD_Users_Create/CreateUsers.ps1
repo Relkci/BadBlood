@@ -259,7 +259,7 @@
     $passwordInWordlist = 1..1000 | get-random
 
     if ($passInWordList -lt 10) {
-        $pwd = Get-Random -InputObject (get-content .\AD_Users_Create\wordlist.txt)
+        $pwd = Get-Random -InputObject (get-content $scriptpath + '\wordlist.txt')
         }
     else {
         $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25 
@@ -317,9 +317,9 @@
     if ($adacReversibleEncryption -lt 10){
         Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
         $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
-        Set-ADAccountPassword $ouLocatio-Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
+        Set-ADAccountPassword $ouLocation -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
         $adacReversibleEncryptionUnset = 1..1000 | Get-Random
-        # This will disable the feature but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration.
+        # This will update the ADAccountcontrol but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration, ect.
         if ($adacReversibleEncryptionUnset -lt 500){
             Set-ADAccountControl $name -AllowReversiblePasswordEncryption $false
             }
@@ -333,7 +333,7 @@
     }
 
     #Set Random Department
-    $aduserDepartment = Get-Random -InputObject (get-content .\AD_Users_Create\names\departments.txt)
+    $aduserDepartment = Get-Random -InputObject (get-content $scriptpath + '\Names\departments.txt')
      try{
          Set-ADUser -Identity $name -Department "$aduserDepartment" 
      }
@@ -341,9 +341,9 @@
     }
 
     #Set Random Job Title
-    $aduserTitle = Get-Random -InputObject (get-content .\AD_Users_Create\names\titles.txt)
+    $aduserTitle = Get-Random -InputObject (get-content $scriptpath + '\Names\titles.txt')
      try{
-         Set-ADUser -Identity $name -Department "$aduserTitle" 
+         Set-ADUser -Identity $name -JobTitle "$aduserTitle" 
      }
     catch{
     }
