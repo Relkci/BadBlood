@@ -264,7 +264,7 @@
     else {
         $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25 
         }
-    }
+    
             if ($passwordinDesc -lt 100) { 
                 $description = 'Just so I dont forget my password is ' + $pwd 
             }else{}
@@ -382,6 +382,3 @@
     ################################
     
     }
-    
-    
-    
