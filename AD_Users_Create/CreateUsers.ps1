@@ -328,7 +328,7 @@
 
     ## Disable random accounts
     $adacDisabled = 1..1000 | Get-Random
-    if ($adacDisabled lt 10) {
+    if ($adacDisabled -lt 10) {
         Set-ADAccountControl $name -Enabled $false
     }
 
@@ -381,4 +381,4 @@
     #End Create User Objects
     ################################
     
-    }
+    
