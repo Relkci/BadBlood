@@ -10,6 +10,7 @@ get-childitem -path ($scriptpath + "\admpwd.ps") -recurse |Foreach-object {
 try {copy-item -path ($scriptpath + "\AdmPwd.admx") -destination "C:\Windows\PolicyDefinitions"} catch {}
 try {copy-item -path ($scriptpath + "\AdmPwd.adml") -destination "C:\Windows\PolicyDefinitions\en-US"} catch {}
 
+
 Import-Module ADMPwd.ps
 Update-AdmPwdADSchema
 Set-AdmPwdComputerSelfPermission -OrgUnit (Get-ADDomain).distinguishedname

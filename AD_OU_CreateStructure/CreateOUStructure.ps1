@@ -32,7 +32,8 @@ $topOUCount = $TopLevelOUs.count
 $x = 1
 foreach ($name in $TopLevelOUs) {
     Write-Progress -Activity "Deploying OU Structure" -Status "Top Level OU Status:" -PercentComplete ($x/$topOUCount*100)
-    New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true
+    try{New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true}
+    catch{}
     $fulldn = "OU=" + $name + "," + $dn 
     #$toplevelouinfo = Get-ADOrganizationalUnit $fulldn
     #=====================================================================================
