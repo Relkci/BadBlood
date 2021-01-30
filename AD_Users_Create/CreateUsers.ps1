@@ -275,7 +275,7 @@
     #SET ATTRIBUTES - no additional attributes set at this time besides UPN
     #Todo: Set SPN for kerberoasting.  Example attribute edit is in createcomputers.ps1
     #===============================
-    write-host "Set UP" 
+    #write-host "Set UPN" 
     $upn = $name + '@' + $dnsroot
     try{Set-ADUser -Identity $name -UserPrincipalName "$upn" }
     catch{}
