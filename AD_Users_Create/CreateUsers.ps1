@@ -313,7 +313,8 @@
     #write-host "Set Change Pass at Logon" 
     $adacChangePassAtLogon = Get-Random -Maximum 100
     if ($adacChangePassAtLogon -lt 4){
-        Set-ADUser -Identity $name -ChangePasswordAtLogon $true
+        try{Set-ADUser -Identity $name -ChangePasswordAtLogon $true}
+        catch{}
     }
 
     ### Set reveriseble encryption on, store a pasword in attribute.
