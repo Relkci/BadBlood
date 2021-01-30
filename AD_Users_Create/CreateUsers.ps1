@@ -262,7 +262,7 @@
         $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))
         }
     else {
-        $pwd = New-SWRandomPassword -MinPasswordLength 12 -MaxPasswordLength 25 
+        $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 
         }
     
     if ($passwordinDesc -lt 8) { 
@@ -369,7 +369,7 @@
     }
 
     #Set Random POBox
-    write-host "SET PoBox" 
+    #write-host "SET PoBox" 
     $aduserPOB = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -POBox $aduserPOB
@@ -378,7 +378,7 @@
     }
 
     #Set Random PostalCode
-    write-host "SET PostalCode" 
+    #write-host "SET PostalCode" 
     $aduserPostalCode = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -PostalCode $aduserPostalCode
@@ -386,7 +386,7 @@
     catch{
     }
     #Set Street Address to badblood tag
-    write-host "Set Street" 
+    #write-host "Set Street" 
     Set-ADUser -Identity $name -Street "Created with secframe.com/badblood."
 
 
