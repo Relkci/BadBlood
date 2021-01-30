@@ -350,14 +350,14 @@
     }
 
     #Set Random Job Title
-    # SKIPPED BECAUSE THIS IS TOO SLOW
+
     #write-host "Set Title" 
     #$aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
     # try{
     #     Set-ADUser -Identity $name -Title "$aduserTitle" 
     # }
     #catch{
-    }
+    #}
 
     #Set Random Employee
     write-host "Set Employee Number" 
