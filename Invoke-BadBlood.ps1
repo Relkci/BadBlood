@@ -57,6 +57,7 @@ if($badblood -eq 'badblood'){
     Write-Progress -Activity "Random Stuff into A domain - Creating OUs" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
     $ousAll = Get-adorganizationalunit -filter *
+    
     write-host "Creating Users on Domain" -ForegroundColor Green
     $NumOfUsers = Get-Random -Minimum 1000 -Maximum 5000
     $X=1
@@ -69,6 +70,7 @@ if($badblood -eq 'badblood'){
         Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfUsers Users " -Status "Progress:" -PercentComplete ($x/$NumOfUsers*100)
     $x++
     }while($x -lt $NumOfUsers)
+    
     $AllUsers = Get-aduser -Filter *
     
     write-host "Creating Groups on Domain" -ForegroundColor Green
@@ -93,7 +95,7 @@ if($badblood -eq 'badblood'){
     .($basescriptPath + '\AD_Computers_Create\CreateComputers.ps1')
     $I++
     do{
-        Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfComps computers" -Status "Progress:" -PercentComplete ($x/$NumOfComps*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfComps computers" -Status "Progress:" -PercentComplete ($x/$NumOfComps*100)
         createcomputer
     $x++
     }while($x -lt $NumOfComps)
