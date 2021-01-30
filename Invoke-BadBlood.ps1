@@ -66,7 +66,7 @@ if($badblood -eq 'badblood'){
     $createuserscriptpath = $basescriptPath + '\AD_Users_Create\'
     do{
       createuser -Domain $Domain -OUList $ousAll -ScriptDir $createuserscriptpath
-        Write-Progress -Activity "Random Stuff into A domain - Creating $i/$NumOfUsers Users " -Status "Progress:" -PercentComplete ($x/$NumOfUsers*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfUsers Users " -Status "Progress:" -PercentComplete ($x/$NumOfUsers*100)
     $x++
     }while($x -lt $NumOfUsers)
     $AllUsers = Get-aduser -Filter *
@@ -80,7 +80,7 @@ if($badblood -eq 'badblood'){
     
     do{
         Creategroup
-        Write-Progress -Activity "Random Stuff into A domain - Creating $i/$NumOfGroups Groups" -Status "Progress:" -PercentComplete ($x/$NumOfGroups*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfGroups Groups" -Status "Progress:" -PercentComplete ($x/$NumOfGroups*100)
     
     $x++
     }while($x -lt $NumOfGroups)
