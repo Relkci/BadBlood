@@ -251,10 +251,10 @@
         
     #Need to figure out how to do the L attribute
     $description = ''
-    $pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
+    #$pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
     #======================================================================
     # 
-    
+    write-host "Create password and description" 
     $passwordinDesc = Get-Random -Maximum 100
     $passwordInWordlist = Get-Random -Maximum 100
 
@@ -265,17 +265,17 @@
         $pwd = New-SWRandomPassword -MinPasswordLength 12 -MaxPasswordLength 25 
         }
     
-            if ($passwordinDesc -lt 8) { 
-                $description = 'Just so I dont forget my password is ' + $pwd 
-            }else{}
-
+    if ($passwordinDesc -lt 8) { 
+        $description = 'Just so I dont forget my password is ' + $pwd 
+    }
+    write-host "Create user" 
     new-aduser -server $setdc  -Description $Description -DisplayName $name -name $name -SamAccountName $name -Surname $name -Enabled $true -Path $ouLocation -AccountPassword (ConvertTo-SecureString ($pwd) -AsPlainText -force)
 
     #===============================
     #SET ATTRIBUTES - no additional attributes set at this time besides UPN
     #Todo: Set SPN for kerberoasting.  Example attribute edit is in createcomputers.ps1
     #===============================
-    
+    write-host "Set UP" 
     $upn = $name + '@' + $dnsroot
     try{Set-ADUser -Identity $name -UserPrincipalName "$upn" }
     catch{}
@@ -283,42 +283,48 @@
     #================================================
     #SET SOME RANDOM AD AccountControl Randomness
     #================================================
-
+    write-host "Set Password Not Required" 
     $adacPaswordNotRequired = Get-Random -Maximum 100
         if ($adacPaswordNotRequired -lt 5) {
         Set-ADAccountControl $name -PasswordNotRequired $true
     }
-
+    write-host "Set Password Never Expires" 
     $adacPasswordNeverExpires = Get-Random -Maximum 100
     if ($adacPasswordNeverExpires -lt 5) {
         Set-ADAccountControl $name -PasswordNeverExpires $true
     }
-
+    write-host "Set Cannot Change Password" 
     $adacCannotChangePassword = Get-Random -Maximum 100
     if ($adacCannotChangePassword -lt 5) {
         Set-ADAccountControl $name -CannotChangePassword $true
     }
 
+    write-host "Set No Delegation" 
     $adacNoDelegation = Get-Random -Maximum 100
     if ($adacNoDelegation -lt 5){
         Set-ADAccountControl $name -AccountNotDelegated $true
     }
+
+    write-host "Set TrustedDelegation" 
     $adacTrustedToAuthDelegation = Get-Random -Maximum 100
     if ($adacTrustedToAuthDelegation -lt 4){
         Set-ADAccountControl $name -TrustedToAuthForDelegation $true
     }
-
+    write-host "Set Change Pass at Logon" 
     $adacChangePassAtLogon = Get-Random -Maximum 100
     if ($adacChangePassAtLogon -lt 4){
         Set-ADUser -Identity $name -ChangePasswordAtLogon $true
     }
 
     ### Set reveriseble encryption on, store a pasword in attribute.
+    write-host "Set Reversible Encryption" 
     $adacReversibleEncryption = Get-Random -Maximum 100
     if ($adacReversibleEncryption -lt 8){
+
         Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
         $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
         Set-ADAccountPassword -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
+        write-host "UnSet Reversible Encryption" 
         $adacReversibleEncryptionUnset = Get-Random -Maximum 100
         # This will update the ADAccountcontrol but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration, ect.
         if ($adacReversibleEncryptionUnset -lt 50){
@@ -328,12 +334,14 @@
     
 
     ## Disable random accounts
+    write-host "Set Disabled Account" 
     $adacDisabled = Get-Random -Maximum 100
     if ($adacDisabled -lt 5) {
         Set-ADAccountControl $name -Enabled $false
     }
 
     #Set Random Department
+    write-host "Set Department" 
     $aduserDepartment = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\departments.txt')
      try{
          Set-ADUser -Identity $name -Department "$aduserDepartment" 
@@ -342,6 +350,7 @@
     }
 
     #Set Random Job Title
+    write-host "Set Title" 
     $aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
      try{
          Set-ADUser -Identity $name -Title "$aduserTitle" 
@@ -349,7 +358,8 @@
     catch{
     }
 
-    #Set Random EmployeeID
+    #Set Random Employee
+    write-host "Set Employee Number" 
     $aduserEmpNum = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -EmployeeNumber $aduserEmpNum
@@ -358,6 +368,7 @@
     }
 
     #Set Random POBox
+    write-host "SET PoBox" 
     $aduserPOB = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -POBox $aduserPOB
@@ -366,6 +377,7 @@
     }
 
     #Set Random PostalCode
+    write-host "SET PostalCode" 
     $aduserPostalCode = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -PostalCode $aduserPostalCode
@@ -373,6 +385,7 @@
     catch{
     }
     #Set Street Address to badblood tag
+    write-host "Set Street" 
     Set-ADUser -Identity $name -Street "Created with secframe.com/badblood."
 
 
