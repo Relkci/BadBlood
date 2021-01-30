@@ -255,8 +255,8 @@
     #======================================================================
     # 
     
-    $passwordinDesc = 1..1000|get-random
-    $passwordInWordlist = 1..1000 | get-random
+    $passwordinDesc = Get-Random -Maximum 100
+    $passwordInWordlist = Get-Random -Maximum 100
 
     if ($passInWordList -lt 50) {
         $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))
@@ -265,7 +265,7 @@
         $pwd = New-SWRandomPassword -MinPasswordLength 12 -MaxPasswordLength 25 
         }
     
-            if ($passwordinDesc -lt 100) { 
+            if ($passwordinDesc -lt 8) { 
                 $description = 'Just so I dont forget my password is ' + $pwd 
             }else{}
 
@@ -284,52 +284,52 @@
     #SET SOME RANDOM AD AccountControl Randomness
     #================================================
 
-    $adacPaswordNotRequired = 1..1000 | get-random
-    if ($adacPaswordNotRequired -lt 50) {
+    $adacPaswordNotRequired = Get-Random -Maximum 100
+        if ($adacPaswordNotRequired -lt 5) {
         Set-ADAccountControl $name -PasswordNotRequired $true
     }
 
-    $adacPasswordNeverExpires = 1..1000 | get-random
-    if ($adacPasswordNeverExpires -lt 50) {
+    $adacPasswordNeverExpires = Get-Random -Maximum 100
+    if ($adacPasswordNeverExpires -lt 5) {
         Set-ADAccountControl $name -PasswordNeverExpires $true
     }
 
-    $adacCannotChangePassword = 1..1000 | get-random
-    if ($adacCannotChangePassword -lt 30) {
+    $adacCannotChangePassword = Get-Random -Maximum 100
+    if ($adacCannotChangePassword -lt 5) {
         Set-ADAccountControl $name -CannotChangePassword $true
     }
 
-    $adacNoDelegation = 1..1000 | Get-Random
-    if ($adacNoDelegation -lt 30){
+    $adacNoDelegation = Get-Random -Maximum 100
+    if ($adacNoDelegation -lt 5){
         Set-ADAccountControl $name -AccountNotDelegated $true
     }
-    $adacTrustedToAuthDelegation = 1..1000 | Get-Random
-    if ($adacTrustedToAuthDelegation -lt 25){
+    $adacTrustedToAuthDelegation = Get-Random -Maximum 100
+    if ($adacTrustedToAuthDelegation -lt 4){
         Set-ADAccountControl $name -TrustedToAuthForDelegation $true
     }
 
-    $adacChangePassAtLogon = 1..1000 | Get-Random
-    if ($adacChangePassAtLogon -lt 10){
+    $adacChangePassAtLogon = Get-Random -Maximum 100
+    if ($adacChangePassAtLogon -lt 4){
         Set-ADUser -Identity $name -ChangePasswordAtLogon $true
     }
 
     ### Set reveriseble encryption on, store a pasword in attribute.
-    $adacReversibleEncryption = 1..1000 | Get-Random
-    if ($adacReversibleEncryption -lt 25){
+    $adacReversibleEncryption = Get-Random -Maximum 100
+    if ($adacReversibleEncryption -lt 8){
         Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
         $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
         Set-ADAccountPassword $ouLocation -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
-        $adacReversibleEncryptionUnset = 1..1000 | Get-Random
+        $adacReversibleEncryptionUnset = Get-Random -Maximum 100
         # This will update the ADAccountcontrol but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration, ect.
-        if ($adacReversibleEncryptionUnset -lt 500){
+        if ($adacReversibleEncryptionUnset -lt 50){
             Set-ADAccountControl $name -AllowReversiblePasswordEncryption $false
             }
         }
     
 
     ## Disable random accounts
-    $adacDisabled = 1..1000 | Get-Random
-    if ($adacDisabled -lt 25) {
+    $adacDisabled = Get-Random -Maximum 100
+    if ($adacDisabled -lt 5) {
         Set-ADAccountControl $name -Enabled $false
     }
 
@@ -350,7 +350,7 @@
     }
 
     #Set Random EmployeeID
-    $aduserEmpNum = 1..100000 | get-random
+    $aduserEmpNum = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -EmployeeNumber $aduserEmpNum
      }
@@ -358,7 +358,7 @@
     }
 
     #Set Random POBox
-    $aduserPOB = 1..100000 | get-random
+    $aduserPOB = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -POBox $aduserPOB
      }
@@ -366,7 +366,7 @@
     }
 
     #Set Random PostalCode
-    $aduserPostalCode = 1..100000 | get-random
+    $aduserPostalCode = Get-Random -Maximum 10000
      try{
          Set-ADUser -Identity $name -PostalCode $aduserPostalCode
      }
