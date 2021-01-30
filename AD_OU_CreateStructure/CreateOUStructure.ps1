@@ -42,7 +42,7 @@ foreach ($name in $TopLevelOUs) {
     if ($name -eq $TopLevelOUs[0]) {
 
         foreach ($adminsubou in $AdminSubOUs) {
-            New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn
+            try{New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn} catch{}
             $adminsubfulldn = "OU=" + $adminsubou + "," + $fulldn
                     
             if ($adminsubou -eq "Staging") {                          
@@ -56,7 +56,7 @@ foreach ($name in $TopLevelOUs) {
                     elseif ($adminsubou -eq 'Tier 2'){$adminOUPrefix = "T2-"}
                     $adminobjectoucombo = $adminOUPrefix + $adminobjectou
 
-                    New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn
+                    try{New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn} catch {}
                 }
             }
         }
@@ -70,11 +70,11 @@ foreach ($name in $TopLevelOUs) {
         $csvlist = import-csv $3LetterCodeCSV
 
         foreach ($ou in $csvlist) {
-            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
+            try{New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)} catch {}
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
             foreach ($ObjectSubOU in $ObjectSubOUs) {
-                New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn
+                try{New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn} catch {}
                 $Objectfulldn = "OU=" + $ObjectSubOU + "," + $csvdn
             }
         }
@@ -88,13 +88,13 @@ foreach ($name in $TopLevelOUs) {
 
 
         foreach ($ou in $csvlist) {
-            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
+            try {New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)} catch{}
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
         }
         #Create Two Sub OUs in People OU required for IDM provisioning 
-        New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'
-        New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'
+        try{New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'} cacth {}
+        try{New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'} cactch {}
     }
     
     else {}
