@@ -318,7 +318,7 @@
     if ($adacReversibleEncryption -lt 8){
         Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
         $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
-        Set-ADAccountPassword $ouLocation -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
+        Set-ADAccountPassword -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
         $adacReversibleEncryptionUnset = Get-Random -Maximum 100
         # This will update the ADAccountcontrol but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration, ect.
         if ($adacReversibleEncryptionUnset -lt 50){
