@@ -58,7 +58,7 @@ if($badblood -eq 'badblood'){
     $I++
     $ousAll = Get-adorganizationalunit -filter *
     write-host "Creating Users on Domain" -ForegroundColor Green
-    $NumOfUsers = 1000..5000|Get-random #this number is the random number of users to create on a domain.  Todo: Make process createusers.ps1 in a parallel loop
+    $NumOfUsers = Get-Random -Minimum 1000 -Maximum 5000
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating Users" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
@@ -66,13 +66,13 @@ if($badblood -eq 'badblood'){
     $createuserscriptpath = $basescriptPath + '\AD_Users_Create\'
     do{
       createuser -Domain $Domain -OUList $ousAll -ScriptDir $createuserscriptpath
-        Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfUsers Users" -Status "Progress:" -PercentComplete ($x/$NumOfUsers*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $i/$NumOfUsers Users " -Status "Progress:" -PercentComplete ($x/$NumOfUsers*100)
     $x++
     }while($x -lt $NumOfUsers)
     $AllUsers = Get-aduser -Filter *
     
     write-host "Creating Groups on Domain" -ForegroundColor Green
-    $NumOfGroups = 100..500|Get-random 
+    $NumOfGroups = Get-Random -Minimum 100 -Maximum 500
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfGroups Groups" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
@@ -80,7 +80,7 @@ if($badblood -eq 'badblood'){
     
     do{
         Creategroup
-        Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfGroups Groups" -Status "Progress:" -PercentComplete ($x/$NumOfGroups*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $i/$NumOfGroups Groups" -Status "Progress:" -PercentComplete ($x/$NumOfGroups*100)
     
     $x++
     }while($x -lt $NumOfGroups)
