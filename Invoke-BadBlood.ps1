@@ -48,10 +48,9 @@ if($badblood -ne 'badblood'){exit}
 if($badblood -eq 'badblood'){
    $Domain = Get-addomain
     Write-Progress -Activity "Random Stuff into A domain" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
-
+    Write-host "Installing LAPS" -ForegroundColor Green
 
     .($basescriptPath + '\AD_LAPS_Install\InstallLAPSSchema.ps1')
-    Write-host "Installing LAPS" -ForegroundColor Green
     Write-Progress -Activity "Random Stuff into A domain: Install LAPS" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
     .($basescriptPath + '\AD_OU_CreateStructure\CreateOUStructure.ps1')
