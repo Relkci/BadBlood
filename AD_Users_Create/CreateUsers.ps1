@@ -246,14 +246,14 @@
     $aduserDepartment = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\departments.txt')
     $aduserDepartmentNumber =Get-Random -Maximum 10000
     #$aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
-    aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles-short.txt')
+    $aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles-short.txt')
     $aduserEmpNum = Get-Random -Maximum 10000
     $aduserPOB = Get-Random -Maximum 10000
     $aduserPostalCode = Get-Random -Maximum 10000
     $aduserStreet = "Created with secframe.com/badblood."
     $aduserKerbrosenc = 'None','DES','RC4','AES128','AES256' | Get-Random 
     $aduserUPN = $name + '@' + $dnsroot
-
+     
 
     new-aduser -server $setdc  -Description $Description `
     -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname `
