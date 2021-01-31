@@ -219,9 +219,11 @@
     
     if((Get-Random -Maximum 100) -le 10){
         $name = ""+ (Get-Random -Minimum 100 -Maximum 999999999) + "SA"
-        $surname = "SA"} 
-        $givenname = $name
-    else{
+        $surname = "SA" 
+        $givenname = $name 
+    }
+    else
+    {
         $surname = get-content('.\AD_Users_Create\Names\familynames-usa-top1000.txt')|get-random
         $genderpreference = 0,1|get-random
         $givenname = get-Random -Input-Object (get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt'))
