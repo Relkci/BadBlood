@@ -244,7 +244,7 @@
     if ((Get-Random -Maximum 100) -lt 3 ){ $adacCannotChangePasswordBool = $true } else { $adacCannotChangePasswordBool = $false}
     if ((Get-Random -Maximum 100) -lt 9 ){ $adacNoDelegationBool = $true } else { $adacNoDelegationBool = $false}
     if ((Get-Random -Maximum 100) -lt 6 ){ $adacTrustedToAuthDelegationBool = $true } else { $adacTrustedToAuthDelegationBool = $false}
-    if ((Get-Random -Maximum 100) -lt 3 ){ $adacChangePassAtLogonBool = $true } else { $adacChangePassAtLogonBool = $false}
+    if (((Get-Random -Maximum 100) -lt 3 ) -and (!$adacPasswordNeverExpiresBool)) { $adacChangePassAtLogonBool = $true } else { $adacChangePassAtLogonBool = $false}
     if ((Get-Random -Maximum 100) -lt 8 ){ $adacReversibleEncryptionBool = $true } else { $adacReversibleEncryptionBool = $false}
     if ((Get-Random -Maximum 100) -lt 4 ){ $adacEnabledBool = $false } else { $adacEnabledBool = $true}
     if ((Get-Random -Maximum 100) -lt 4 ){ $adacSmartCardReqBool = $true } else { $adacSmartCardReqBool = $false}
