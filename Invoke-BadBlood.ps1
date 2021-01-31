@@ -58,7 +58,7 @@ if($badblood -eq 'badblood'){
     $I++
     $ousAll = Get-adorganizationalunit -filter *
     write-host "Creating Users on Domain" -ForegroundColor Green
-    $NumOfUsers = Get-Random -Minimum 1000 -Maximum 5000
+    $NumOfUsers = Get-Random -Minimum 500 -Maximum 2000
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating Users" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
@@ -72,7 +72,7 @@ if($badblood -eq 'badblood'){
     $AllUsers = Get-aduser -Filter *
     
     write-host "Creating Groups on Domain" -ForegroundColor Green
-    $NumOfGroups = Get-Random -Minimum 100 -Maximum 500
+    $NumOfGroups = Get-Random -Minimum 50 -Maximum 200
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfGroups Groups" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
@@ -87,7 +87,7 @@ if($badblood -eq 'badblood'){
     $Grouplist = Get-ADGroup -Filter { GroupCategory -eq "Security" -and GroupScope -eq "Global"  } -Properties isCriticalSystemObject
     $LocalGroupList =  Get-ADGroup -Filter { GroupScope -eq "domainlocal"  } -Properties isCriticalSystemObject
     write-host "Creating Computers on Domain" -ForegroundColor Green
-    $NumOfComps = 50..150|Get-random 
+    $NumOfComps = Get-Random -Minimum 50 -Maximum 200
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating Computers" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     .($basescriptPath + '\AD_Computers_Create\CreateComputers.ps1')
