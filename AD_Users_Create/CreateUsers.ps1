@@ -230,7 +230,7 @@
         $name = $givenname+"_"+$surname
     }
     $ouLocation = (Get-Random $OUsAll).distinguishedname
-    if ((Get-Random -Maximum 100) -lt 50) { $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))} else { $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 }
+    if ((Get-Random -Maximum 100) -lt 50) { $pwd = Get-Random -Input-Object (get-content ('.\AD_Users_Create\wordlist.txt'))} else { $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 }
     $aduserPassword =(ConvertTo-SecureString ($pwd) -AsPlainText -force)
     if ((Get-Random -Maximum 100) -lt 5 ){ $aduserdescription = 'Just so I dont forget my password is ' + $pwd  } else {$aduserdescription =""}
     if ((Get-Random -Maximum 100) -lt 8 ){ $adacAccountNotDelegatedBool = $true } else { $adacAccountNotDelegatedBool = $false}
