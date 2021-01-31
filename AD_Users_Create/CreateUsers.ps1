@@ -246,7 +246,7 @@
     if ((Get-Random -Maximum 100) -lt 6 ){ $adacTrustedToAuthDelegationBool = $true } else { $adacTrustedToAuthDelegationBool = $false}
     if ((Get-Random -Maximum 100) -lt 3 ){ $adacChangePassAtLogonBool = $true } else { $adacChangePassAtLogonBool = $false}
     if ((Get-Random -Maximum 100) -lt 8 ){ $adacReversibleEncryptionBool = $true } else { $adacReversibleEncryptionBool = $false}
-    if ((Get-Random -Maximum 100) -lt 4 ){ $adacEnabledBool = $false } else { $adacEnabledBool = true}
+    if ((Get-Random -Maximum 100) -lt 4 ){ $adacEnabledBool = $false } else { $adacEnabledBool = $true}
     if ((Get-Random -Maximum 100) -lt 4 ){ $adacSmartCardReqBool = $true } else { $adacSmartCardReqBool = $false}
     $aduserDepartment = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\departments.txt')
     $aduserDepartmentNumber =Get-Random -Maximum 10000
