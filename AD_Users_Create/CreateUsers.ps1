@@ -72,7 +72,7 @@
         }else{
             $scriptpath = $scriptdir
         }
-    }
+    
     
 
         
@@ -278,3 +278,4 @@
     -POBox $aduserPOB -PostalCode $aduserPostalCode -StreetAddress $aduserStreet `
     -UserPrincipalName $aduserUPN
      
+    }
