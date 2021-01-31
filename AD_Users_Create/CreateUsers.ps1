@@ -255,7 +255,7 @@
     $aduserUPN = $name + '@' + $dnsroot
      
 
-    new-aduser -server $setdc  -Description $Description `
+    new-aduser `
     -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname `
     -Enabled $adacDisabledBool `
     -Path $ouLocation `
