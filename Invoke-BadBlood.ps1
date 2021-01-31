@@ -55,10 +55,11 @@ if($badblood -eq 'badblood'){
     $I++
     .($basescriptPath + '\AD_OU_CreateStructure\CreateOUStructure.ps1')
     Write-Progress -Activity "Random Stuff into A domain - Creating OUs" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
+
     $I++
     $ousAll = Get-adorganizationalunit -filter *
-    write-host "Creating Users on Domain" -ForegroundColor Green
     $NumOfUsers = Get-Random -Minimum 500 -Maximum 2000
+    write-host "Creating $NumOfUsers Users on Domain" -ForegroundColor Green
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating Users" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
@@ -70,30 +71,30 @@ if($badblood -eq 'badblood'){
     $x++
     }while($x -lt $NumOfUsers)
     $AllUsers = Get-aduser -Filter *
-    
-    write-host "Creating Groups on Domain" -ForegroundColor Green
-    $NumOfGroups = Get-Random -Minimum 50 -Maximum 200
+
+    $NumOfGroups = Get-Random -Minimum 50 -Maximum 200    
+    write-host "Creating $NumOfGroups Groups on Domain" -ForegroundColor Green
     $X=1
     Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfGroups Groups" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     $I++
     .($basescriptPath + '\AD_Groups_Create\CreateGroups.ps1')
-    
     do{
         Creategroup
         Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfGroups Groups" -Status "Progress:" -PercentComplete ($x/$NumOfGroups*100)
-    
     $x++
     }while($x -lt $NumOfGroups)
+    
     $Grouplist = Get-ADGroup -Filter { GroupCategory -eq "Security" -and GroupScope -eq "Global"  } -Properties isCriticalSystemObject
     $LocalGroupList =  Get-ADGroup -Filter { GroupScope -eq "domainlocal"  } -Properties isCriticalSystemObject
-    write-host "Creating Computers on Domain" -ForegroundColor Green
+    
     $NumOfComps = Get-Random -Minimum 50 -Maximum 200
+    write-host "Creating $NumOfComps Computers on Domain" -ForegroundColor Green
     $X=1
-    Write-Progress -Activity "Random Stuff into A domain - Creating Computers" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
+    Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfComps Computers" -Status "Progress:" -PercentComplete ($i/$totalscripts*100)
     .($basescriptPath + '\AD_Computers_Create\CreateComputers.ps1')
     $I++
     do{
-        Write-Progress -Activity "Random Stuff into A domain - Creating $NumOfComps computers" -Status "Progress:" -PercentComplete ($x/$NumOfComps*100)
+        Write-Progress -Activity "Random Stuff into A domain - Creating $x/$NumOfComps computers" -Status "Progress:" -PercentComplete ($x/$NumOfComps*100)
         createcomputer
     $x++
     }while($x -lt $NumOfComps)
