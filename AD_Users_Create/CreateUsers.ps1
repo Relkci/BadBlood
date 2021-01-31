@@ -215,188 +215,58 @@
         }
     }
     
-        
-    #get owner all parameters and store as variable to call upon later
-           
-        
     
-    #=======================================================================
-    
-    #will work on adding things to containers later $ousall += get-adobject -Filter {objectclass -eq 'container'} -ResultSetSize 300|where-object -Property objectclass -eq 'container'|where-object -Property distinguishedname -notlike "*}*"|where-object -Property distinguishedname -notlike  "*DomainUpdates*"
-    
-    $ouLocation = (Get-Random $OUsAll).distinguishedname
-    
-    
-    
-    $accountType = 1..100|get-random 
-    if($accountType -le 10){ # X percent chance of being a service account
-    #service
-    $nameSuffix = "SA"
-    $description = 'Created with secframe.com/badblood.'
-    #removing do while loop and making random number range longer, sorry if the account is there already
-    # this is so that I can attempt to import multithreading on user creation
-    
-        $name = ""+ (Get-Random -Minimum 100 -Maximum 9999999999) + "$nameSuffix"
-        
-        
-    }else{
+    if((Get-Random -Maximum 100) -le 10){
+        $name = ""+ (Get-Random -Minimum 100 -Maximum 999999999) + "SA"
+        $surname = "SA"} 
+        $givenname = $name
+    else{
         $surname = get-content('.\AD_Users_Create\Names\familynames-usa-top1000.txt')|get-random
-    $genderpreference = 0,1|get-random
-    if ($genderpreference -eq 0){$givenname = get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt')|get-random}else{$givenname = get-content('.\AD_Users_Create\Names\malenames-usa-top1000.txt')|get-random}
-    $name = $givenname+"_"+$surname
+        $genderpreference = 0,1|get-random
+        $givenname = get-Random -Input-Object (get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt'))
+        $name = $givenname+"_"+$surname
     }
-    
-        $departmentnumber = [convert]::ToInt32('9999999') 
-        
-        
-    #Need to figure out how to do the L attribute
-    $description = ''
-    #$pwd = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
-    #======================================================================
-    # 
-    #write-host "Create password and description" 
-    $passwordinDesc = Get-Random -Maximum 100
-    $passwordInWordlist = Get-Random -Maximum 100
-
-    if ($passInWordList -lt 50) {
-        $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))
-        }
-    else {
-        $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 
-        }
-    
-    if ($passwordinDesc -lt 8) { 
-        $description = 'Just so I dont forget my password is ' + $pwd 
-    }
-    #write-host "Create user" 
-    new-aduser -server $setdc  -Description $Description -DisplayName $name -name $name -SamAccountName $name -Surname $name -Enabled $true -Path $ouLocation -AccountPassword (ConvertTo-SecureString ($pwd) -AsPlainText -force)
-
-    #===============================
-    #SET ATTRIBUTES - no additional attributes set at this time besides UPN
-    #Todo: Set SPN for kerberoasting.  Example attribute edit is in createcomputers.ps1
-    #===============================
-    #write-host "Set UPN" 
-    $upn = $name + '@' + $dnsroot
-    try{Set-ADUser -Identity $name -UserPrincipalName "$upn" }
-    catch{}
-
-    #================================================
-    #SET SOME RANDOM AD AccountControl Randomness
-    #================================================
-    #write-host "Set Password Not Required" 
-    $adacPaswordNotRequired = Get-Random -Maximum 100
-        if ($adacPaswordNotRequired -lt 5) {
-        Set-ADAccountControl $name -PasswordNotRequired $true
-    }
-    #write-host "Set Password Never Expires" 
-    $adacPasswordNeverExpires = Get-Random -Maximum 100
-    if ($adacPasswordNeverExpires -lt 5) {
-        Set-ADAccountControl $name -PasswordNeverExpires $true
-    }
-    #write-host "Set Cannot Change Password" 
-    $adacCannotChangePassword = Get-Random -Maximum 100
-    if ($adacCannotChangePassword -lt 5) {
-        Set-ADAccountControl $name -CannotChangePassword $true
-    }
-
-    #write-host "Set No Delegation" 
-    $adacNoDelegation = Get-Random -Maximum 100
-    if ($adacNoDelegation -lt 5){
-        Set-ADAccountControl $name -AccountNotDelegated $true
-    }
-
-    #write-host "Set TrustedDelegation" 
-    $adacTrustedToAuthDelegation = Get-Random -Maximum 100
-    if ($adacTrustedToAuthDelegation -lt 4){
-        Set-ADAccountControl $name -TrustedToAuthForDelegation $true
-    }
-    #write-host "Set Change Pass at Logon" 
-    $adacChangePassAtLogon = Get-Random -Maximum 100
-    if ($adacChangePassAtLogon -lt 4){
-        try{Set-ADUser -Identity $name -ChangePasswordAtLogon $true}
-        catch{}
-    }
-
-    ### Set reveriseble encryption on, store a pasword in attribute.
-    #write-host "Set Reversible Encryption" 
-    $adacReversibleEncryption = Get-Random -Maximum 100
-    if ($adacReversibleEncryption -lt 8){
-
-        Set-ADAccountControl $name -AllowReversiblePasswordEncryption $true
-        $newpass = New-SWRandomPassword -MinPasswordLength 22 -MaxPasswordLength 25
-        Set-ADAccountPassword -Identity $name -NewPassword (ConvertTo-SecureString -AsPlainText $newpass -Force)
-        #write-host "UnSet Reversible Encryption" 
-        $adacReversibleEncryptionUnset = Get-Random -Maximum 100
-        # This will update the ADAccountcontrol but retain the stored reversible encrypted password in the AD Database.  Discoverable by NTDS.dit enumeration, ect.
-        if ($adacReversibleEncryptionUnset -lt 50){
-            Set-ADAccountControl $name -AllowReversiblePasswordEncryption $false
-            }
-        }
-    
-
-    ## Disable random accounts
-    #write-host "Set Disabled Account" 
-    $adacDisabled = Get-Random -Maximum 100
-    if ($adacDisabled -lt 5) {
-        Set-ADAccountControl $name -Enabled $false
-    }
-
-    #Set Random Department
-    #write-host "Set Department" 
+    $ouLocation = (Get-Random $OUsAll).distinguishedname
+    if ((Get-Random -Maximum 100) -lt 50) { $pwd = Get-Random -InputObject (get-content ('.\AD_Users_Create\wordlist.txt'))} else { $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 }
+    $aduserPassword =(ConvertTo-SecureString ($pwd) -AsPlainText -force)
+    if ((Get-Random -Maximum 100) -lt 5 ){ $aduserdescription = 'Just so I dont forget my password is ' + $pwd  } else {$aduserdescription =""}
+    if ((Get-Random -Maximum 100) -lt 8 ){ $adacAccountNotDelegatedBool = $true } else { $adacAccountNotDelegatedBool = $false}
+    if ((Get-Random -Maximum 100) -lt 3 ){ $adacPaswordNotRequiredBool = $true } else { $adacPaswordNotRequiredBool = $false}
+    if ((Get-Random -Maximum 100) -lt 5 ){ $adacPasswordNeverExpiresBool = $true } else { $adacPasswordNeverExpiresBool = $false}
+    if ((Get-Random -Maximum 100) -lt 3 ){ $adacCannotChangePasswordBool = $true } else { $adacCannotChangePasswordBool = $false}
+    if ((Get-Random -Maximum 100) -lt 9 ){ $adacNoDelegationBool = $true } else { $adacNoDelegationBool = $false}
+    if ((Get-Random -Maximum 100) -lt 6 ){ $adacTrustedToAuthDelegationBool = $true } else { $adacTrustedToAuthDelegationBool = $false}
+    if ((Get-Random -Maximum 100) -lt 3 ){ $adacChangePassAtLogonBool = $true } else { $adacChangePassAtLogonBool = $false}
+    if ((Get-Random -Maximum 100) -lt 8 ){ $adacReversibleEncryptionBool = $true } else { $adacReversibleEncryptionBool = $false}
+    if ((Get-Random -Maximum 100) -lt 4 ){ $adacDisabledBool = $true } else { $adacDisabledBool = $false}
+    if ((Get-Random -Maximum 100) -lt 4 ){ $adacSmartCardReqBool = $true } else { $adacSmartCardReqBool = $false}
     $aduserDepartment = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\departments.txt')
-     try{
-         Set-ADUser -Identity $name -Department "$aduserDepartment" 
-     }
-    catch{
-    }
-
-    #Set Random Job Title
-    #This process was too slow, aproximately 1 account/sec.  uncomment if you want this to run. could also make a smaller titles wordlist.
-    #write-host "Set Title" 
+    $aduserDepartmentNumber =Get-Random -Maximum 10000
     #$aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles.txt')
-    # try{
-    #     Set-ADUser -Identity $name -Title "$aduserTitle" 
-    # }
-    #catch{
-    #}
-
-    #Set Random Employee
-    #write-host "Set Employee Number" 
+    aduserTitle = Get-Random -InputObject (get-content '.\AD_Users_Create\Names\titles-short.txt')
     $aduserEmpNum = Get-Random -Maximum 10000
-     try{
-         Set-ADUser -Identity $name -EmployeeNumber $aduserEmpNum
-     }
-    catch{
-    }
-
-    #Set Random POBox
-    #write-host "SET PoBox" 
     $aduserPOB = Get-Random -Maximum 10000
-     try{
-         Set-ADUser -Identity $name -POBox $aduserPOB
-     }
-    catch{
-    }
-
-    #Set Random PostalCode
-    #write-host "SET PostalCode" 
     $aduserPostalCode = Get-Random -Maximum 10000
-     try{
-         Set-ADUser -Identity $name -PostalCode $aduserPostalCode
-     }
-    catch{
-    }
-    #Set Street Address to badblood tag
-    #write-host "Set Street" 
-    Set-ADUser -Identity $name -Street "Created with secframe.com/badblood."
+    $aduserStreet = "Created with secframe.com/badblood."
+    $aduserKerbrosenc = 'None','DES','RC4','AES128','AES256' | Get-Random 
+    $aduserUPN = $name + '@' + $dnsroot
 
 
-        
-    $pwd = ''
-    
-    
-    ################################
-    #End Create User Objects
-    ################################
-    
+    new-aduser -server $setdc  -Description $Description `
+    -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname`
+    -Enabled $adacDisabledBool `
+    -Path $ouLocation `
+    -AccountPassword $aduserPassword) `
+    -AccountNotDelegated  $adacAccountNotDelegatedBool `
+    -AllowReversiblePasswordEncryption $adacReversibleEncryptionBool `
+    -CannotChangePassword $adacCannotChangePasswordBool `
+    -ChangePasswordAtLogon $adacChangePassAtLogonBool `
+    -PasswordNeverExpires $adacPasswordNeverExpiresBool `
+    -PasswordNotRequired $adacPaswordNotRequiredBool `
+    -SmartcardLogonRequired $adacSmartCardReqBool `
+    -TrustedForDelegation $adacTrustedToAuthDelegationBool `
+    -KerberosEncryptionType $aduserKerbrosenc `
+    -Department '$aduserDepartment' -Description '$aduserdescription' -Title '$aduserTitle' -EmployeeNumber $aduserEmpNum `
+    -POBox $aduserPOB -PostalCode $aduserPostalCode -StreetAddress '$aduserStreet' `
+    -UserPrincipalName $aduserUPN
     }
