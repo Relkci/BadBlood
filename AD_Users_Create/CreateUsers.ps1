@@ -72,6 +72,7 @@
         }else{
             $scriptpath = $scriptdir
         }
+    }
     
 
         
@@ -253,10 +254,10 @@
 
 
     new-aduser -server $setdc  -Description $Description `
-    -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname`
+    -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname `
     -Enabled $adacDisabledBool `
     -Path $ouLocation `
-    -AccountPassword $aduserPassword) `
+    -AccountPassword $aduserPassword `
     -AccountNotDelegated  $adacAccountNotDelegatedBool `
     -AllowReversiblePasswordEncryption $adacReversibleEncryptionBool `
     -CannotChangePassword $adacCannotChangePasswordBool `
@@ -269,4 +270,4 @@
     -Department '$aduserDepartment' -Description '$aduserdescription' -Title '$aduserTitle' -EmployeeNumber $aduserEmpNum `
     -POBox $aduserPOB -PostalCode $aduserPostalCode -StreetAddress '$aduserStreet' `
     -UserPrincipalName $aduserUPN
-    }
+    
