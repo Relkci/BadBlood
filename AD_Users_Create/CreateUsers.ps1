@@ -226,11 +226,16 @@
     {
         $surname = get-content('.\AD_Users_Create\Names\familynames-usa-top1000.txt')|get-random
         $genderpreference = 0,1|get-random
-        $givenname = get-Random -Input-Object (get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt'))
+        $givenname = get-Random -InputObject (get-content('.\AD_Users_Create\Names\femalenames-usa-top1000.txt'))
         $name = $givenname+"_"+$surname
     }
     $ouLocation = (Get-Random $OUsAll).distinguishedname
-    if ((Get-Random -Maximum 100) -lt 50) { $pwd = Get-Random -Input-Object (get-content ('.\AD_Users_Create\wordlist.txt'))} else { $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 }
+    if ((Get-Random -Maximum 100) -lt 50) {
+        $pwd = Get-Random -InputObject (get-content '.\AD_Users_Create\wordlist.txt')
+    } 
+    else{
+        $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 
+    }
     $aduserPassword =(ConvertTo-SecureString ($pwd) -AsPlainText -force)
     if ((Get-Random -Maximum 100) -lt 5 ){ $aduserdescription = 'Just so I dont forget my password is ' + $pwd  } else {$aduserdescription =""}
     if ((Get-Random -Maximum 100) -lt 8 ){ $adacAccountNotDelegatedBool = $true } else { $adacAccountNotDelegatedBool = $false}
