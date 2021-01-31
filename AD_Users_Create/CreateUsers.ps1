@@ -237,7 +237,7 @@
         $pwd = New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 10 
     }
     $aduserPassword =(ConvertTo-SecureString ($pwd) -AsPlainText -force)
-    if ((Get-Random -Maximum 100) -lt 5 ){ $aduserdescription = 'Just so I dont forget my password is ' + $pwd  } else {$aduserdescription =""}
+    if ((Get-Random -Maximum 100) -lt 5 ){ $aduserdescription = 'Just so I dont forget my password is ' + $pwd } else {$aduserdescription =""}
     if ((Get-Random -Maximum 100) -lt 8 ){ $adacAccountNotDelegatedBool = $true } else { $adacAccountNotDelegatedBool = $false}
     if ((Get-Random -Maximum 100) -lt 3 ){ $adacPaswordNotRequiredBool = $true } else { $adacPaswordNotRequiredBool = $false}
     if ((Get-Random -Maximum 100) -lt 5 ){ $adacPasswordNeverExpiresBool = $true } else { $adacPasswordNeverExpiresBool = $false}
@@ -258,9 +258,9 @@
     $aduserStreet = "Created with secframe.com/badblood."
     $aduserKerbrosenc = 'None','DES','RC4','AES128','AES256' | Get-Random 
     $aduserUPN = $name + '@' + $dnsroot
-     
 
     new-aduser `
+    -Server $setDC `
     -DisplayName $name -name $name -SamAccountName $name -Surname $surname -GivenName $givenname `
     -Enabled $adacDisabledBool `
     -Path $ouLocation `
@@ -274,7 +274,7 @@
     -SmartcardLogonRequired $adacSmartCardReqBool `
     -TrustedForDelegation $adacTrustedToAuthDelegationBool `
     -KerberosEncryptionType $aduserKerbrosenc `
-    -Department '$aduserDepartment' -Description '$aduserdescription' -Title '$aduserTitle' -EmployeeNumber $aduserEmpNum `
-    -POBox $aduserPOB -PostalCode $aduserPostalCode -StreetAddress '$aduserStreet' `
+    -Department $aduserDepartment -Description $aduserdescription -Title $aduserTitle -EmployeeNumber $aduserEmpNum `
+    -POBox $aduserPOB -PostalCode $aduserPostalCode -StreetAddress $aduserStreet `
     -UserPrincipalName $aduserUPN
-    
+     
