@@ -32,8 +32,7 @@ $topOUCount = $TopLevelOUs.count
 $x = 1
 foreach ($name in $TopLevelOUs) {
     Write-Progress -Activity "Deploying OU Structure" -Status "Top Level OU Status:" -PercentComplete ($x/$topOUCount*100)
-    try{New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true}
-    catch{}
+    New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true
     $fulldn = "OU=" + $name + "," + $dn 
     #$toplevelouinfo = Get-ADOrganizationalUnit $fulldn
     #=====================================================================================
@@ -43,8 +42,7 @@ foreach ($name in $TopLevelOUs) {
     if ($name -eq $TopLevelOUs[0]) {
 
         foreach ($adminsubou in $AdminSubOUs) {
-            try{New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn} 
-            catch{}
+            New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn
             $adminsubfulldn = "OU=" + $adminsubou + "," + $fulldn
                     
             if ($adminsubou -eq "Staging") {                          
@@ -58,8 +56,7 @@ foreach ($name in $TopLevelOUs) {
                     elseif ($adminsubou -eq 'Tier 2'){$adminOUPrefix = "T2-"}
                     $adminobjectoucombo = $adminOUPrefix + $adminobjectou
 
-                    try{New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn} 
-                    catch {}
+                    New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn
                 }
             }
         }
@@ -73,12 +70,11 @@ foreach ($name in $TopLevelOUs) {
         $csvlist = import-csv $3LetterCodeCSV
 
         foreach ($ou in $csvlist) {
-            try{New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)} 
-            catch {}
+            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
             foreach ($ObjectSubOU in $ObjectSubOUs) {
-                try{New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn} catch {}
+                New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn
                 $Objectfulldn = "OU=" + $ObjectSubOU + "," + $csvdn
             }
         }
@@ -92,16 +88,13 @@ foreach ($name in $TopLevelOUs) {
 
 
         foreach ($ou in $csvlist) {
-            try {New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)} 
-            catch{}
+            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
         }
         #Create Two Sub OUs in People OU required for IDM provisioning 
-        try{New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'} 
-        catch {}
-        try{New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'} 
-        catch {}
+        New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'
+        New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'
     }
     
     else {}
