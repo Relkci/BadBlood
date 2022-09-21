@@ -149,6 +149,7 @@ if ($badblood -eq 'badblood') {
    
    #Computer Creation Time
    write-host "Creating Computers on Domain" -ForegroundColor Green
+   $createcomputerscriptpath = $basescriptPath + '\AD_Computers_Create\'
 
    $X = 1
    Write-Progress -Activity "Random Stuff into A domain - Creating Computers" -Status "Progress:" -PercentComplete ($i / $totalscripts * 100)
@@ -156,7 +157,7 @@ if ($badblood -eq 'badblood') {
    $I++
    do {
       Write-Progress -Activity "Random Stuff into A domain - Creating $ComputerCount computers" -Status "Progress:" -PercentComplete ($x / $ComputerCount * 100)
-      createcomputer
+      createcomputer  -ScriptDir $createcomputerscriptpath -Domain $Domain -OUList $ousAll
       $x++
    }while ($x -lt $ComputerCount)
    $Complist = get-adcomputer -filter *
