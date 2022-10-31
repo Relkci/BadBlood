@@ -54,7 +54,7 @@ $basescriptPath = Get-ScriptDirectory
 $totalscripts = 8
 
 $i = 0
-Clear-host
+
 write-host "Welcome to BadBlood"
 if($NonInteractive -eq $false){
     Write-Host  'Press any key to continue...';
