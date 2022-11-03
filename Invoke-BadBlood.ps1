@@ -56,7 +56,12 @@ $totalscripts = 8
 $i = 0
 
 write-host "Welcome to BadBlood"
+
+
+$ErrorActionPreference='SilentlyContinue'
+
 if($NonInteractive -eq $false){
+    $ErrorActionPreference='Continue'
     Write-Host  'Press any key to continue...';
     write-host "`n"
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
