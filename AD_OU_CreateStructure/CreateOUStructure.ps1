@@ -32,8 +32,7 @@ $topOUCount = $TopLevelOUs.count
 $x = 1
 foreach ($name in $TopLevelOUs) {
     Write-Progress -Activity "Deploying OU Structure" -Status "Top Level OU Status:" -PercentComplete ($x/$topOUCount*100)
-    #New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true
-    if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$Name'")) { New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion $true } else { Write-Host "OU '$Name' already exists." }
+    New-ADOrganizationalUnit -Name $Name -ProtectedFromAccidentalDeletion:$true
     $fulldn = "OU=" + $name + "," + $dn 
     #$toplevelouinfo = Get-ADOrganizationalUnit $fulldn
     #=====================================================================================
@@ -43,8 +42,7 @@ foreach ($name in $TopLevelOUs) {
     if ($name -eq $TopLevelOUs[0]) {
 
         foreach ($adminsubou in $AdminSubOUs) {
-            if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$adminsubou'")) { New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn } else { Write-Host "OU '$adminsubou' under '$fulldn' already exists." }
-            #New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn
+            New-ADOrganizationalUnit -Name $adminsubou -Path $fulldn
             $adminsubfulldn = "OU=" + $adminsubou + "," + $fulldn
                     
             if ($adminsubou -eq "Staging") {                          
@@ -58,8 +56,7 @@ foreach ($name in $TopLevelOUs) {
                     elseif ($adminsubou -eq 'Tier 2'){$adminOUPrefix = "T2-"}
                     $adminobjectoucombo = $adminOUPrefix + $adminobjectou
 
-                    #New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn
-                    if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$adminobjectoucombo'")) { New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn } else { Write-Host "OU '$adminobjectoucombo' under '$adminsubfulldn' already exists." }
+                    New-ADOrganizationalUnit -Name $adminobjectoucombo -Path $adminsubfulldn
                 }
             }
         }
@@ -73,13 +70,11 @@ foreach ($name in $TopLevelOUs) {
         $csvlist = import-csv $3LetterCodeCSV
 
         foreach ($ou in $csvlist) {
-            #New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
-            if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$($ou.name)' ")) { New-ADOrganizationalUnit -Name $ou.name -Path $fulldn -Description $ou.description } else { Write-Host "OU '$($ou.name)' under '$fulldn' already exists." }
+            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
             foreach ($ObjectSubOU in $ObjectSubOUs) {
-                #New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn
-                if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$ObjectSubOU'")) { New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn } else { Write-Host "OU '$ObjectSubOU' under '$csvdn' already exists." }
+                New-ADOrganizationalUnit -Name $ObjectSubOU -Path $csvdn
                 $Objectfulldn = "OU=" + $ObjectSubOU + "," + $csvdn
             }
         }
@@ -93,19 +88,13 @@ foreach ($name in $TopLevelOUs) {
 
 
         foreach ($ou in $csvlist) {
-            #New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
-            if (-not (Get-ADOrganizationalUnit -Filter "Name -eq '$($ou.name)' ")) { New-ADOrganizationalUnit -Name $ou.name -Path $fulldn -Description $ou.description } else { Write-Host "OU '$($ou.name)' under '$fulldn' already exists." }
+            New-ADOrganizationalUnit -Name ($ou.name) -Path $fulldn -Description ($ou.description)
             $csvdn = "OU=" + $ou.name + "," + $fulldn 
             
         }
         #Create Two Sub OUs in People OU required for IDM provisioning 
-
-        #New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'
-        if (-not (Get-ADOrganizationalUnit -Filter "Name -eq 'Deprovisioned'")) { New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User accounts that have been deprovisioned by the IDM System' } else { Write-Host "OU 'Deprovisioned' under '$fulldn' already exists." }
-
-        #New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'
-        if (-not (Get-ADOrganizationalUnit -Filter "Name -eq 'Unassociated'")) { New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User objects that do not have any department affiliation' } else { Write-Host "OU 'Unassociated' under '$fulldn' already exists." }
-
+        New-ADOrganizationalUnit -Name 'Deprovisioned' -Path $fulldn -Description 'User account that have been deprovisioned by the IDM System'
+        New-ADOrganizationalUnit -Name 'Unassociated' -Path $fulldn -Description 'User Object that do have have any department affliation'
     }
     
     else {}
