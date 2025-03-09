@@ -2,4 +2,19 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+
 /.vs
+=======
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/.vs/BadBlood/v17/.suo
+/.vs/BadBlood/FileContentIndex/a19e2d38-7b56-4e93-9f44-045a896f4a61.vsidx
+/.vs/BadBlood/FileContentIndex/caae0d50-f60f-4626-8649-416fe650920b.vsidx
+/.vs/BadBlood/FileContentIndex/read.lock
+/.vs/BadBlood/FileContentIndex/94d0de01-a5a0-465d-8c7a-bae0500d95fc.vsidx
+/.vs/BadBlood/FileContentIndex/264d8387-0ceb-4d71-b4e4-ef2e60cbfd18.vsidx
+/.vs/BadBlood/FileContentIndex/59465c78-b5f4-4970-8269-88733e547029.vsidx
+/.vs/BadBlood/FileContentIndex/dc9fc47c-2f7a-4173-bff5-3ea21b3a7f27.vsidx
+/.vs/BadBlood/FileContentIndex/5779120c-e0a8-4080-9a7f-465a5c9f3c33.vsidx
+
